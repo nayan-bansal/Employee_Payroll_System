@@ -1,5 +1,6 @@
 package test.java.Employee.Employee_Payroll;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -17,9 +18,9 @@ public class Employee_Payroll_Service_Test {
 
 	@Test
 	public void given3EmployeesWhenWrittenToFileShouldMatchEmployeeEnteries() {
-		EmployeePayrollData[] arrayOfEmps = { new EmployeePayrollData(1, "Diksha kalra", 100000.0),
-				new EmployeePayrollData(2, "Bill Gates", 200000.0),
-				new EmployeePayrollData(3, "mark Zuckerberg", 300000.0) };
+		EmployeePayrollData[] arrayOfEmps = { new EmployeePayrollData(1, "mark", 100000.0),
+				new EmployeePayrollData(2, "bill", 200000.0),
+				new EmployeePayrollData(3, "terisa", 300000.0) };
 		EmployeePayrollService employeePayrollService;
 		employeePayrollService = new EmployeePayrollService(Arrays.asList(arrayOfEmps));
 		employeePayrollService.writeEmployeePayrollData(IOService.FILE_IO);
@@ -67,7 +68,7 @@ public class Employee_Payroll_Service_Test {
 	}
 	
 	@Test
-	public void givenNewEmployee_WhenAdded_ShouldSyncWithDB() {
+	public void givenNewEmployee_WhenAdded_ShouldSyncWithDB() throws PayrollSystemException, SQLException{
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
 		employeePayrollService.readEmployeePayrollData(IOService.DB_IO);
 		employeePayrollService.addEmployeeToPayroll("mark",5000000.0,LocalDate.now(),'M');
