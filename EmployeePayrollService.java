@@ -107,7 +107,7 @@ public class EmployeePayrollService {
 			LocalDate endDate) {
 		if (ioService.equals(IOService.DB_IO))
 			this.employeePayrollList = employeePayrollDBService.getEmployeeForDateRange(startDate, endDate);
-		return this.employeePayrollList;
+		return employeePayrollList;
 	}
 
 	public Map<String, Double> getAvgSalary(IOService ioService) throws PayrollSystemException {
@@ -122,5 +122,9 @@ public class EmployeePayrollService {
 			System.out.println(e);
 		}
 		return genderToAverageSalaryMap;
+	}
+
+	public void addEmployeeToPayroll(String name, double salary, LocalDate joiningDate, char gender) {
+		employeePayrollList.add(employeePayrollDBService.addEmployeeToPayroll(name,salary,joiningDate,gender));	
 	}
 }
