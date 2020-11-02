@@ -39,11 +39,12 @@ public class Employee_Payroll_Service_Test {
 	}
 	
 	@Test
-	public void givenNewSalaryForEmployee_WhenUpdated_ShouldSyncWithDB() throws PayrollSystemException {
+	public void givenNewSalaryForEmployee_WhenUpdatedUsingPreparedStatement_ShouldSyncWithDB()
+			throws PayrollSystemException {
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
 		List<EmployeePayrollData> employeePayrollData = employeePayrollService.readEmployeePayrollData(IOService.DB_IO);
-		employeePayrollService.updateEmployeeSalary("terisa",3000000.0);
-		boolean result=employeePayrollService.checkEmployeePayrollInSyncWithDB("terisa");
+		employeePayrollService.updateEmployeeSalary("terisa", 3000000.0);
+		boolean result = employeePayrollService.checkEmployeePayrollInSyncWithDB("terisa");
 		Assert.assertTrue(result);
 	}
 }
