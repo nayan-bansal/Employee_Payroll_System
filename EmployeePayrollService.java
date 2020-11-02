@@ -2,6 +2,7 @@ package main.java.Employee.Employee_Payroll;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -124,7 +125,7 @@ public class EmployeePayrollService {
 		return genderToAverageSalaryMap;
 	}
 
-	public void addEmployeeToPayroll(String name, double salary, LocalDate joiningDate, char gender) {
+	public void addEmployeeToPayroll(String name, double salary, LocalDate joiningDate, char gender) throws PayrollSystemException, SQLException {
 		employeePayrollList.add(employeePayrollDBService.addEmployeeToPayroll(name,salary,joiningDate,gender));	
 	}
 }
