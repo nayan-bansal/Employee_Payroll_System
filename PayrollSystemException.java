@@ -1,12 +1,10 @@
 package main.java.Employee.Employee_Payroll;
 
-public class PayrollSystemException extends Exception{
-
-	
+public class PayrollSystemException extends Exception {
 	private static final long serialVersionUID = 1L;
 
 	enum ExceptionType {
-		UPDATE_FILE_EXCEPTION
+		UPDATE_FILE_EXCEPTION, RETRIEVE_EXCEPTION
 	}
 
 	ExceptionType type;
