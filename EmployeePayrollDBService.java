@@ -138,28 +138,8 @@ public class EmployeePayrollDBService {
 		return genderToAverageSalaryMap;
 	}
 
-	public EmployeePayrollData addEmployeeToPayrollUC7(String name, double salary, LocalDate start, char gender) {
-		int employeeId = -1;
-		EmployeePayrollData employeePayrollData = null;
-		String sql = String.format(
-				"INSERT INTO employee_payroll (name,gender,salary,start)" + "VALUES('%s','%s','%s','%s')", name, gender,
-				salary, Date.valueOf(start));
-		try (Connection connection = this.getConnection()) {
-			Statement statement = connection.createStatement();
-			int rowAffected = statement.executeUpdate(sql, statement.RETURN_GENERATED_KEYS);
-			if (rowAffected == 1) {
-				ResultSet result = statement.getGeneratedKeys();
-				if (result.next())
-					employeeId = result.getInt(1);
-			}
-			employeePayrollData = new EmployeePayrollData(employeeId, name, salary, start, gender);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return employeePayrollData;
-	}
-
-	public EmployeePayrollData addEmployeeToPayroll(String name, double salary, LocalDate start, char gender) {
+	public EmployeePayrollData addEmployeeToPayroll(String name, double salary, LocalDate start, char gender)
+			throws PayrollSystemException, SQLException {
 		int employeeId = -1;
 		Connection connection = null;
 		EmployeePayrollData employeePayrollData = null;
@@ -179,8 +159,15 @@ public class EmployeePayrollDBService {
 				if (result.next())
 					employeeId = result.getInt(1);
 			}
+			if (rowAffected == 0)
+				throw new PayrollSystemException("insert data into employee table unsuccessful!!!",
+						PayrollSystemException.ExceptionType.INSERT_EXCEPTION);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			connection.rollback();
+			throw new PayrollSystemException("insert data into employee table unsuccessful!!!",
+					PayrollSystemException.ExceptionType.INSERT_EXCEPTION);
+		} catch (PayrollSystemException e2) {
+			e2.printStackTrace();
 			try {
 				connection.rollback();
 				return employeePayrollData;
@@ -188,6 +175,7 @@ public class EmployeePayrollDBService {
 				e1.printStackTrace();
 			}
 		}
+
 		try (Statement statement = connection.createStatement()) {
 			double deductions = salary * 0.2;
 			double taxable_pay = salary - deductions;
@@ -201,11 +189,18 @@ public class EmployeePayrollDBService {
 			if (rowAffected == 1) {
 				employeePayrollData = new EmployeePayrollData(employeeId, name, salary, start);
 			}
+			if (rowAffected == 0)
+				throw new PayrollSystemException("insert data into payroll table unsuccessful!!!",
+						PayrollSystemException.ExceptionType.INSERT_EXCEPTION);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			connection.rollback();
+			throw new PayrollSystemException("insert data into payroll table unsuccessful!!!",
+					PayrollSystemException.ExceptionType.INSERT_EXCEPTION);
+		} catch (PayrollSystemException e1) {
+			e1.printStackTrace();
 			try {
 				connection.rollback();
-			} catch (SQLException e1) {
+			} catch (SQLException e2) {
 				e1.printStackTrace();
 			}
 		}
