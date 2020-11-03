@@ -1,3 +1,4 @@
+package test.java.Employee.Employee_Payroll;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -15,6 +16,7 @@ import main.java.Employee.Employee_Payroll.PayrollSystemException;
 
 public class Employee_Payroll_Service_Test {
 
+	
 	@Test
 	public void given3EmployeesWhenWrittenToFileShouldMatchEmployeeEnteries() {
 		EmployeePayrollData[] arrayOfEmps = { new EmployeePayrollData(1, "mark", 100000.0),
@@ -31,7 +33,7 @@ public class Employee_Payroll_Service_Test {
 	public void givenEmployeePayrollInDB_WhenRetrieved_ShouldMatchEmployeeCount() {
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
 		List<EmployeePayrollData> employeePayrollData = employeePayrollService.readEmployeePayrollData(IOService.DB_IO);
-		Assert.assertEquals(5, employeePayrollData.size());
+		Assert.assertEquals(6, employeePayrollData.size());
 	}
 
 	@Test
@@ -52,7 +54,7 @@ public class Employee_Payroll_Service_Test {
 		LocalDate endDate = LocalDate.now();
 		List<EmployeePayrollData> employeePayrollData = employeePayrollService
 				.readEmployeePayrollForDateRange(IOService.DB_IO, startDate, endDate);
-		Assert.assertEquals(5, employeePayrollData.size());
+		Assert.assertEquals(6, employeePayrollData.size());
 	}
 
 	@Test
@@ -62,7 +64,7 @@ public class Employee_Payroll_Service_Test {
 		Map<String, Double> genderToAverageSalaryMap = employeePayrollService.getAvgSalary(IOService.DB_IO);
 		Double avgSalaryMale = 3000000.0;
 		Assert.assertEquals(avgSalaryMale, genderToAverageSalaryMap.get("M"));
-		Double avgSalaryFemale = 3000000.0;
+		Double avgSalaryFemale = 3500000.0;
 		Assert.assertEquals(avgSalaryFemale, genderToAverageSalaryMap.get("F"));
 	}
 
