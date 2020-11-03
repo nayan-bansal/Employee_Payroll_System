@@ -17,6 +17,7 @@ public class EmployeePayrollService {
 	private List<EmployeePayrollData> employeePayrollList;
 	private Map<String, Double> genderToAverageSalaryMap;
 	private EmployeePayrollDBService employeePayrollDBService;
+	private EmployeePayrollDBServiceNew employeePayrollDBServiceNew;
 
 	public EmployeePayrollService(List<EmployeePayrollData> employeePayrollList) {
 		this();
@@ -25,6 +26,7 @@ public class EmployeePayrollService {
 
 	public EmployeePayrollService() {
 		employeePayrollDBService = EmployeePayrollDBService.getInstance();
+		employeePayrollDBServiceNew=EmployeePayrollDBServiceNew.getInstance();
 	}
 
 	public static void main(String[] args) {
@@ -125,7 +127,8 @@ public class EmployeePayrollService {
 		return genderToAverageSalaryMap;
 	}
 
-	public void addEmployeeToPayroll(String name, double salary, LocalDate joiningDate, char gender) throws PayrollSystemException, SQLException {
-		employeePayrollList.add(employeePayrollDBService.addEmployeeToPayroll(name,salary,joiningDate,gender));	
+	public void addEmployeeToPayroll(String name, double salary, LocalDate joiningDate, char gender)
+			throws PayrollSystemException {
+		employeePayrollList.add(employeePayrollDBServiceNew.addEmployeeToPayroll(name, salary, joiningDate, gender));
 	}
 }
