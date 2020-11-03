@@ -1,3 +1,8 @@
+package main.java.Employee.Employee_Payroll;
+
+import java.sql.*;
+import java.time.LocalDate;
+
 public class EmployeePayrollDBServiceNew {
 	private static EmployeePayrollDBServiceNew employeePayrollDBServiceNew;
 	private EmployeePayrollDBServiceNew() {
@@ -144,5 +149,19 @@ public class EmployeePayrollDBServiceNew {
 				}
 		}
 		return employeePayrollData;
+	}
+
+	public int removeEmployee(String name) {
+		try (Connection connection = EmployeePayrollDBService.getConnection();) {
+			String sql = "update employee_payroll set is_active=? where name=?";
+			PreparedStatement preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setBoolean(1, false);
+			preparedStatement.setString(2, name);
+			int status = preparedStatement.executeUpdate();
+			return status;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return 0;
 	}
 }
