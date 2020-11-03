@@ -1,4 +1,3 @@
-package test.java.Employee.Employee_Payroll;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -32,7 +31,7 @@ public class Employee_Payroll_Service_Test {
 	public void givenEmployeePayrollInDB_WhenRetrieved_ShouldMatchEmployeeCount() {
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
 		List<EmployeePayrollData> employeePayrollData = employeePayrollService.readEmployeePayrollData(IOService.DB_IO);
-		Assert.assertEquals(4, employeePayrollData.size());
+		Assert.assertEquals(5, employeePayrollData.size());
 	}
 
 	@Test
@@ -53,7 +52,7 @@ public class Employee_Payroll_Service_Test {
 		LocalDate endDate = LocalDate.now();
 		List<EmployeePayrollData> employeePayrollData = employeePayrollService
 				.readEmployeePayrollForDateRange(IOService.DB_IO, startDate, endDate);
-		Assert.assertEquals(4, employeePayrollData.size());
+		Assert.assertEquals(5, employeePayrollData.size());
 	}
 
 	@Test
@@ -66,13 +65,13 @@ public class Employee_Payroll_Service_Test {
 		Double avgSalaryFemale = 3000000.0;
 		Assert.assertEquals(avgSalaryFemale, genderToAverageSalaryMap.get("F"));
 	}
-	
+
 	@Test
-	public void givenNewEmployee_WhenAdded_ShouldSyncWithDB() throws PayrollSystemException, SQLException{
+	public void givenNewEmployee_WhenAdded_ShouldSyncWithDB() throws PayrollSystemException {
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
 		employeePayrollService.readEmployeePayrollData(IOService.DB_IO);
-		employeePayrollService.addEmployeeToPayroll("mark",5000000.0,LocalDate.now(),'M');
-		boolean result=employeePayrollService.checkEmployeePayrollInSyncWithDB("mark");
+		employeePayrollService.addEmployeeToPayroll("mark", 5000000.0, LocalDate.now(), 'M');
+		boolean result = employeePayrollService.checkEmployeePayrollInSyncWithDB("mark");
 		Assert.assertTrue(result);
 	}
 }
