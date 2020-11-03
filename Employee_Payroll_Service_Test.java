@@ -18,9 +18,9 @@ public class Employee_Payroll_Service_Test {
 
 	@Test
 	public void given3EmployeesWhenWrittenToFileShouldMatchEmployeeEnteries() {
-		EmployeePayrollData[] arrayOfEmps = { new EmployeePayrollData(1, "Diksha kalra", 100000.0),
-				new EmployeePayrollData(2, "Bill Gates", 200000.0),
-				new EmployeePayrollData(3, "mark Zuckerberg", 300000.0) };
+		EmployeePayrollData[] arrayOfEmps = { new EmployeePayrollData(1, "mark", 100000.0),
+				new EmployeePayrollData(2, "bill", 200000.0),
+				new EmployeePayrollData(3, "terisa", 300000.0) };
 		EmployeePayrollService employeePayrollService;
 		employeePayrollService = new EmployeePayrollService(Arrays.asList(arrayOfEmps));
 		employeePayrollService.writeEmployeePayrollData(IOService.FILE_IO);
@@ -74,5 +74,16 @@ public class Employee_Payroll_Service_Test {
 		employeePayrollService.addEmployeeToPayroll("mark", 5000000.0, LocalDate.now(), 'M');
 		boolean result = employeePayrollService.checkEmployeePayrollInSyncWithDB("mark");
 		Assert.assertTrue(result);
+	}
+
+	@Test
+	public void givenEmployeeWhenRemoved_ShouldRemainInDatabase() {
+		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
+		employeePayrollService.readEmployeePayrollData(IOService.DB_IO);
+		int countOfEmployeeRemoved = employeePayrollService.removeEmployeeFromPayroll("mark", IOService.DB_IO);
+		Assert.assertEquals(1, countOfEmployeeRemoved);
+		List<EmployeePayrollData> employeePayrollData = employeePayrollService
+				.readActiveEmployeePayrollData(IOService.DB_IO);
+		Assert.assertEquals(4, employeePayrollData.size());
 	}
 }
