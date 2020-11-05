@@ -1,11 +1,12 @@
 package test.java.Employee.Employee_Payroll;
 
-import java.sql.SQLException;
+import java.time.Duration;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-
+import java.util.logging.Logger;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -85,5 +86,21 @@ public class Employee_Payroll_Service_Test {
 		List<EmployeePayrollData> employeePayrollData = employeePayrollService
 				.readActiveEmployeePayrollData(IOService.DB_IO);
 		Assert.assertEquals(4, employeePayrollData.size());
+	}
+	
+	@Test
+	public void given6Employee_WhenAddedToDB_ShouldMatchEmployeeEnteries() {
+		EmployeePayrollData[] arrayOfEmps = {
+				new EmployeePayrollData(0, "Jane", 3000000.0, LocalDate.now(), 'M'),
+				new EmployeePayrollData(0, "Grace", 2000000.0, LocalDate.now(), 'F'),
+				new EmployeePayrollData(0, "Kimball", 2000000.0, LocalDate.now(), 'M'),
+				new EmployeePayrollData(0, "Wayne", 2000000.0, LocalDate.now(), 'M') };
+		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
+		employeePayrollService.readEmployeePayrollData(IOService.DB_IO);
+		Instant start = Instant.now();
+		employeePayrollService.addEmployeesToPayroll(Arrays.asList(arrayOfEmps));
+		Instant end = Instant.now();
+		log.info("Duration without thread: " + Duration.between(start, end));
+		Assert.assertEquals(8, employeePayrollService.countEntries(IOService.DB_IO));
 	}
 }
