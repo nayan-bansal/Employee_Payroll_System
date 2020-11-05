@@ -1,6 +1,7 @@
 package main.java.Employee.Employee_Payroll;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class EmployeePayrollData {
 	public int id;
@@ -36,7 +37,12 @@ public class EmployeePayrollData {
 	public String toString() {
 		return "Employee Id: " + id + " Employee Name: " + name + " Employee Salary: " + salary;
 	}
-
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(name,salary,startDate,gender);
+	}
+	
 	@Override
 	public boolean equals(Object o) {
 		if (this == o)
