@@ -91,16 +91,20 @@ public class Employee_Payroll_Service_Test {
 	@Test
 	public void given6Employee_WhenAddedToDB_ShouldMatchEmployeeEnteries() {
 		EmployeePayrollData[] arrayOfEmps = {
-				new EmployeePayrollData(0, "Jane", 3000000.0, LocalDate.now(), 'M'),
-				new EmployeePayrollData(0, "Grace", 2000000.0, LocalDate.now(), 'F'),
-				new EmployeePayrollData(0, "Kimball", 2000000.0, LocalDate.now(), 'M'),
-				new EmployeePayrollData(0, "Wayne", 2000000.0, LocalDate.now(), 'M') };
+				new EmployeePayrollData(0, "Patric Jane", 3000000.0, LocalDate.now(), 'M'),
+				new EmployeePayrollData(0, "Grace Vanpelt", 2000000.0, LocalDate.now(), 'F'),
+				new EmployeePayrollData(0, "Kimball Cho", 2000000.0, LocalDate.now(), 'M'),
+				new EmployeePayrollData(0, "Wayne Rigsby", 2000000.0, LocalDate.now(), 'M') };
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
 		employeePayrollService.readEmployeePayrollData(IOService.DB_IO);
 		Instant start = Instant.now();
 		employeePayrollService.addEmployeesToPayroll(Arrays.asList(arrayOfEmps));
 		Instant end = Instant.now();
 		log.info("Duration without thread: " + Duration.between(start, end));
-		Assert.assertEquals(8, employeePayrollService.countEntries(IOService.DB_IO));
+		Instant threadStart=Instant.now();
+		employeePayrollService.addEmployeesToPayrollWith(Arrays.asList(arrayOfEmps));
+		Instant threadEnd=Instant.now();
+		log.info("Duration with thread: " + Duration.between(threadStart, threadEnd));
+		Assert.assertEquals(12, employeePayrollService.countEntries(IOService.DB_IO));
 	}
 }
