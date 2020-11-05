@@ -9,7 +9,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
+import java.time.LocalDate;
+import java.util.*;
+import java.util.logging.Logger;
+
 public class EmployeePayrollService {
+	Logger log = Logger.getLogger(EmployeePayrollService.class.getName());
+
 	public enum IOService {
 		CONSOLE_IO, FILE_IO, DB_IO, REST_IO
 	}
@@ -26,7 +32,7 @@ public class EmployeePayrollService {
 
 	public EmployeePayrollService() {
 		employeePayrollDBService = EmployeePayrollDBService.getInstance();
-		employeePayrollDBServiceNew=EmployeePayrollDBServiceNew.getInstance();
+		employeePayrollDBServiceNew = EmployeePayrollDBServiceNew.getInstance();
 	}
 
 	public static void main(String[] args) {
@@ -66,7 +72,7 @@ public class EmployeePayrollService {
 		if (fileIo.equals(IOService.FILE_IO)) {
 			return new EmployeePayrollFileIOService().countEntries();
 		}
-		return 0;
+		return employeePayrollList.size();
 	}
 
 	public List<EmployeePayrollData> readPayrollData(IOService ioService) {
@@ -132,10 +138,24 @@ public class EmployeePayrollService {
 		employeePayrollList.add(employeePayrollDBServiceNew.addEmployeeToPayroll(name, salary, joiningDate, gender));
 	}
 
+	public void addEmployeesToPayroll(List<EmployeePayrollData> employeePayrollDataList) {
+		employeePayrollDataList.forEach(employeePayrollData -> {
+			log.info("Employee being added : " + employeePayrollData.name);
+			try {
+				this.addEmployeeToPayroll(employeePayrollData.name, employeePayrollData.salary,
+						employeePayrollData.startDate, employeePayrollData.gender);
+			} catch (PayrollSystemException e) {
+				e.printStackTrace();
+			}
+			log.info("Employee added : " + employeePayrollData.name);
+		});
+		log.info(" " + this.employeePayrollList);
+	}
+
 	public int removeEmployeeFromPayroll(String name, IOService ioService) {
-		int employeeCount=0;
+		int employeeCount = 0;
 		if (ioService.equals(IOService.DB_IO))
-			employeeCount=employeePayrollDBServiceNew.removeEmployee(name);
+			employeeCount = employeePayrollDBServiceNew.removeEmployee(name);
 		return employeeCount;
 	}
 
