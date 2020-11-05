@@ -1,8 +1,3 @@
-package main.java.Employee.Employee_Payroll;
-
-import java.sql.*;
-import java.time.LocalDate;
-
 public class EmployeePayrollDBServiceNew {
 	private static EmployeePayrollDBServiceNew employeePayrollDBServiceNew;
 
@@ -28,7 +23,8 @@ public class EmployeePayrollDBServiceNew {
 			e.printStackTrace();
 		}
 		try (Statement statement = connection.createStatement()) {
-			String sql = String.format("INSERT INTO employee_payroll (name,gender,salary,start)" + "VALUES('%s','%s','%s','%s')", name,
+			String sql = String.format(
+					"INSERT INTO employee_payroll (name,gender,salary,start)" + "VALUES('%s','%s','%s','%s')", name,
 					gender, salary, Date.valueOf(start));
 			int rowAffected = statement.executeUpdate(sql, statement.RETURN_GENERATED_KEYS);
 			if (rowAffected == 1) {
@@ -60,7 +56,8 @@ public class EmployeePayrollDBServiceNew {
 			double taxable_pay = salary - deductions;
 			double tax = taxable_pay * 0.1;
 			double net_pay = salary - tax;
-			String sql = String.format("INSERT INTO payroll_details (id,basic_pay,deductions,taxable_pay,tax,net_pay)" + ""
+			String sql = String.format(
+					"INSERT INTO payroll_details (id,basic_pay,deductions,taxable_pay,tax,net_pay)" + ""
 							+ "VALUES('%s','%s','%s','%s','%s','%s')",
 					employeeId, salary, deductions, taxable_pay, tax, net_pay);
 			int rowAffected = statement.executeUpdate(sql);
