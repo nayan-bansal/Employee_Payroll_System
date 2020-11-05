@@ -152,6 +152,33 @@ public class EmployeePayrollService {
 		log.info(" " + this.employeePayrollList);
 	}
 
+	public void addEmployeesToPayrollWith(List<EmployeePayrollData> employeePayrollDataList) {
+		Map<Integer, Boolean> employeeAdditionStatus = new HashMap<Integer, Boolean>();
+		employeePayrollDataList.forEach(employeePayrollData -> {
+			Runnable task = () -> {
+				employeeAdditionStatus.put(employeePayrollData.hashCode(), false);
+				log.info("Employee being added: " + Thread.currentThread().getName());
+				try {
+					this.addEmployeeToPayroll(employeePayrollData.name, employeePayrollData.salary,
+							employeePayrollData.startDate, employeePayrollData.gender);
+				} catch (PayrollSystemException e) {
+					e.printStackTrace();
+				}
+				employeeAdditionStatus.put(employeePayrollData.hashCode(), true);
+				log.info("Employee added: " + Thread.currentThread().getName());
+			};
+			Thread thread = new Thread(task, employeePayrollData.name);
+			thread.start();
+		});
+		while (employeeAdditionStatus.containsValue(false)) {
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+			}
+		}
+		log.info(" " + this.employeePayrollList);
+	}
+
 	public int removeEmployeeFromPayroll(String name, IOService ioService) {
 		int employeeCount = 0;
 		if (ioService.equals(IOService.DB_IO))
