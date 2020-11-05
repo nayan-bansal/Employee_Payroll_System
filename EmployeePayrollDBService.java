@@ -23,7 +23,7 @@ public class EmployeePayrollDBService {
 		return employeePayrollDBService;
 	}
 
-	public static synchronized Connection getConnection() throws SQLException {
+	public static Connection getConnection() throws SQLException {
 		connectionCounter++;
 		String jdbcURL = "jdbc:mysql://localhost:3307/payroll_service?useSSL=false";
 		String userName = "root";
