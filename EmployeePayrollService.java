@@ -152,7 +152,7 @@ public class EmployeePayrollService {
 		log.info(" " + this.employeePayrollList);
 	}
 
-	public void addEmployeesToPayrollWith(List<EmployeePayrollData> employeePayrollDataList) {
+	public void addEmployeesToPayrollUsingThreads(List<EmployeePayrollData> employeePayrollDataList) {
 		Map<Integer, Boolean> employeeAdditionStatus = new HashMap<Integer, Boolean>();
 		employeePayrollDataList.forEach(employeePayrollData -> {
 			Runnable task = () -> {
