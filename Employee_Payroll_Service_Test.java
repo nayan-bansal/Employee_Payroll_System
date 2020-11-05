@@ -107,4 +107,25 @@ public class Employee_Payroll_Service_Test {
 		log.info("Duration without thread: " + Duration.between(threadStart, threadEnd));
 		Assert.assertEquals(12, employeePayrollService.countEntries(IOService.DB_IO));
 	}
+	@Test
+	public void givenEmployeePayrollInDB_WhenRetrieved_ShouldMatchEmployeeCount() {
+		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
+		List<EmployeePayrollData> employeePayrollData = employeePayrollService.readEmployeePayrollData(IOService.DB_IO);
+		Assert.assertEquals(6, employeePayrollData.size());
+	}
+
+	@Test
+	public void given4Employees_WhenUpdated_shouldSyncWithDB() throws PayrollSystemException {
+		EmployeePayrollData[] arrayOfEmps = { new EmployeePayrollData(1, "nayan", 1000000.0, LocalDate.now(), 'M'),
+				new EmployeePayrollData(0, "james", 1000000.0, LocalDate.now(), 'F'),
+				new EmployeePayrollData(0, "charlie", 5000000.0, LocalDate.now(), 'M') };
+		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
+		employeePayrollService.readEmployeePayrollData(IOService.DB_IO);
+		Instant start = Instant.now();
+		employeePayrollService.updateEmployeeToPayroll(Arrays.asList(arrayOfEmps));
+		Instant end = Instant.now();
+		log.info("Duration with thread: " + Duration.between(start, end));
+		boolean result = employeePayrollService.checkEmployeePayrollInSyncWithDB("charlie");
+		Assert.assertTrue(result);
+	}
 }
