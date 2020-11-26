@@ -4,9 +4,9 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.Map;
-import java.util.logging.Logger;
+import java.util.logging.*;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -17,6 +17,7 @@ import main.java.Employee.Employee_Payroll.PayrollSystemException;
 
 public class Employee_Payroll_Service_Test {
 
+	private static Logger log = Logger.getLogger(Employee_Payroll_Service_Test.class.getName());
 	@Test
 	public void given3EmployeesWhenWrittenToFileShouldMatchEmployeeEnteries() {
 		EmployeePayrollData[] arrayOfEmps = { new EmployeePayrollData(1, "mark", 100000.0),
@@ -108,7 +109,7 @@ public class Employee_Payroll_Service_Test {
 		Assert.assertEquals(12, employeePayrollService.countEntries(IOService.DB_IO));
 	}
 	@Test
-	public void givenEmployeePayrollInDB_WhenRetrieved_ShouldMatchEmployeeCount() {
+	public void givenEmployeePayrollInDB_WhenRetrieved_ShouldMatchEmployeeCount2() {
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
 		List<EmployeePayrollData> employeePayrollData = employeePayrollService.readEmployeePayrollData(IOService.DB_IO);
 		Assert.assertEquals(6, employeePayrollData.size());
